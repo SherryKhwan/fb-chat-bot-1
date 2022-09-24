@@ -586,47 +586,47 @@ class ChatBot(Client):
 
         self.markAsDelivered(author_id, thread_id)
 
-    def onMessageUnsent(self, mid=None, author_id=None, thread_id=None, thread_type=None, ts=None, msg=None):
-        if(author_id == self.uid):
-            pass
-        else:
-            try:
-                conn=sqlite3.connect("messages.db")
-                c=conn.cursor()
-                c.execute("""
-                SELECT * FROM "{}" WHERE mid = "{}"
-                """.format(str(author_id).replace('"', '""'), mid.replace('"', '""')))
+#     def onMessageUnsent(self, mid=None, author_id=None, thread_id=None, thread_type=None, ts=None, msg=None):
+#         if(author_id == self.uid):
+#             pass
+#         else:
+#             try:
+#                 conn=sqlite3.connect("messages.db")
+#                 c=conn.cursor()
+#                 c.execute("""
+#                 SELECT * FROM "{}" WHERE mid = "{}"
+#                 """.format(str(author_id).replace('"', '""'), mid.replace('"', '""')))
 
-                fetched_msg=c.fetchall()
-                conn.commit()
-                conn.close()
-                unsent_msg=fetched_msg[0][1]
-                if("//video.xx.fbcdn" in unsent_msg):
-                    reply = f"You just unsent a video"
-                    self.send(Message(text=reply), thread_id=thread_id,
-                          thread_type=thread_type)
-                    if(thread_type == ThreadType.USER):
-                        self.sendRemoteFiles(
-                        file_urls=unsent_msg, message=None, thread_id=thread_id, thread_type=ThreadType.USER)
-                    elif(thread_type == ThreadType.GROUP):
-                        self.sendRemoteFiles(
-                        file_urls=unsent_msg, message=None, thread_id=thread_id, thread_type=ThreadType.GROUP)
-                elif("//scontent.xx.fbc" in unsent_msg):
-                    reply=f"You just unsent an image"
-                    self.send(Message(text=reply), thread_id=thread_id,
-                              thread_type=thread_type)
-                    if(thread_type == ThreadType.USER):
-                        self.sendRemoteFiles(
-                            file_urls=unsent_msg, message=None, thread_id=thread_id, thread_type=ThreadType.USER)
-                    elif(thread_type == ThreadType.GROUP):
-                        self.sendRemoteFiles(
-                            file_urls=unsent_msg, message=None, thread_id=thread_id, thread_type=ThreadType.GROUP)
-                else:
-                    reply=f"You just unsent a message:\n{unsent_msg} "
-                    self.send(Message(text=reply), thread_id=thread_id,
-                              thread_type=thread_type)
-            except:
-                pass
+#                 fetched_msg=c.fetchall()
+#                 conn.commit()
+#                 conn.close()
+#                 unsent_msg=fetched_msg[0][1]
+#                 if("//video.xx.fbcdn" in unsent_msg):
+#                     reply = f"You just unsent a video"
+#                     self.send(Message(text=reply), thread_id=thread_id,
+#                           thread_type=thread_type)
+#                     if(thread_type == ThreadType.USER):
+#                         self.sendRemoteFiles(
+#                         file_urls=unsent_msg, message=None, thread_id=thread_id, thread_type=ThreadType.USER)
+#                     elif(thread_type == ThreadType.GROUP):
+#                         self.sendRemoteFiles(
+#                         file_urls=unsent_msg, message=None, thread_id=thread_id, thread_type=ThreadType.GROUP)
+#                 elif("//scontent.xx.fbc" in unsent_msg):
+#                     reply=f"You just unsent an image"
+#                     self.send(Message(text=reply), thread_id=thread_id,
+#                               thread_type=thread_type)
+#                     if(thread_type == ThreadType.USER):
+#                         self.sendRemoteFiles(
+#                             file_urls=unsent_msg, message=None, thread_id=thread_id, thread_type=ThreadType.USER)
+#                     elif(thread_type == ThreadType.GROUP):
+#                         self.sendRemoteFiles(
+#                             file_urls=unsent_msg, message=None, thread_id=thread_id, thread_type=ThreadType.GROUP)
+#                 else:
+#                     reply=f"You just unsent a message:\n{unsent_msg} "
+#                     self.send(Message(text=reply), thread_id=thread_id,
+#                               thread_type=thread_type)
+#             except:
+#                 pass
 
     def onColorChange(self, mid=None, author_id=None, new_color=None, thread_id=None, thread_type=ThreadType.USER, **kwargs):
         reply="You changed the theme ✌️😎"
